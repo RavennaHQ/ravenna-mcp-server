@@ -14,12 +14,25 @@
     "dev": "node --loader ts-node/esm index.ts",
     "build": "tsc",
     "prepare": "npm run build",
-    "inspect": "npx @modelcontextprotocol/inspector npm run dev"
+    "inspect": "npx @modelcontextprotocol/inspector npm run dev",
+    "lint": "eslint index.ts --ext .ts",
+    "lint:fix": "eslint index.ts --ext .ts --fix",
+    "format": "prettier --write \"**/*.{ts,json,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,json,md}\"",
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
+    "@eslint/js": "^9.25.1",
     "@types/node": "^20.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.31.0",
+    "@typescript-eslint/parser": "^8.31.0",
+    "eslint": "^9.25.1",
+    "eslint-config-prettier": "^10.1.2",
+    "eslint-plugin-prettier": "^5.2.6",
+    "prettier": "^3.5.3",
     "ts-node": "^10.9.1",
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+    "typescript-eslint": "^8.31.0"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.10.1"

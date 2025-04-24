@@ -11,6 +11,27 @@ import {
 
 import type { Tool } from "@modelcontextprotocol/sdk/types.js";
 
+// Type definitions
+type TicketFilters = {
+  status?: string;
+  priority?: string;
+  assignee?: string;
+  tags?: string[];
+  limit?: number;
+  [key: string]: unknown;
+};
+
+type TicketUpdates = {
+  id: string;
+  title?: string;
+  description?: string;
+  status?: string;
+  priority?: string;
+  assignee?: string;
+  tags?: string[];
+  [key: string]: unknown;
+};
+
 const server = new Server(
   {
     name: "ravenna-mcp-server",
@@ -20,7 +41,7 @@ const server = new Server(
     capabilities: {
       tools: {},
     },
-  },
+  }
 );
 
 // Define tools for Ravenna ticket management
@@ -192,7 +213,7 @@ async function createTicket(
   title: string,
   description: string,
   priority?: string,
-  tags?: string[],
+  tags?: string[]
 ) {
   const api_key = process.env.RAVENNA_API_KEY;
 
@@ -217,14 +238,14 @@ async function createTicket(
   try {
     const response = await fetch(
       "https://core.api.ravennahq.com/api/tickets",
-      options,
+      options
     );
 
     if (!response.ok) {
       throw new Error(`Failed to create ticket: ${response.statusText}`);
     }
 
-    const data = await response.json() as {
+    const data = (await response.json()) as {
       id: string;
       title: string;
       priority: string;
@@ -248,15 +269,16 @@ async function createTicket(
 }
 
 // Function to update a ticket
-async function updateTicket(id: string, updates: Record<string, any>) {
+async function updateTicket(id: string, updates: TicketUpdates) {
   const api_key = process.env.RAVENNA_API_KEY;
 
   if (!api_key) {
     throw new Error("RAVENNA_API_KEY is required");
   }
 
-  // Remove id from updates object
-  const { id: _, ...updateData } = updates;
+  // Remove id from updates object to avoid duplication
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { id: _id, ...updateData } = updates;
 
   const options = {
     method: "PUT",
@@ -270,14 +292,14 @@ async function updateTicket(id: string, updates: Record<string, any>) {
   try {
     const response = await fetch(
       `https://core.api.ravennahq.com/api/tickets/${id}`,
-      options,
+      options
     );
 
     if (!response.ok) {
       throw new Error(`Failed to update ticket: ${response.statusText}`);
     }
 
-    const data = await response.json() as {
+    const data = (await response.json()) as {
       id: string;
       title: string;
       priority: string;
@@ -301,7 +323,7 @@ async function updateTicket(id: string, updates: Record<string, any>) {
 }
 
 // Function to list tickets
-async function listTickets(filters: Record<string, any>) {
+async function listTickets(filters: TicketFilters) {
   const api_key = process.env.RAVENNA_API_KEY;
 
   if (!api_key) {
@@ -385,14 +407,14 @@ async function getTicket(id: string) {
           "x-ravenna-api-token": `Bearer ${api_key}`,
           "Content-Type": "application/json",
         },
-      },
+      }
     );
 
     if (!response.ok) {
       throw new Error(`Failed to get ticket: ${await response.text()}`);
     }
 
-    const ticket = await response.json() as {
+    const ticket = (await response.json()) as {
       id: string;
       title: string;
       status: string;
@@ -452,21 +474,18 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           input.title,
           input.description,
           input.priority,
-          input.tags,
+          input.tags
         ),
       };
     }
 
     if (request.params.name === "update_ticket") {
-      const input = request.params.arguments as {
-        id: string;
-        [key: string]: any;
-      };
+      const input = request.params.arguments as TicketUpdates;
       return { content: await updateTicket(input.id, input) };
     }
 
     if (request.params.name === "list_tickets") {
-      const input = request.params.arguments as Record<string, any>;
+      const input = request.params.arguments as TicketFilters;
       return { content: await listTickets(input || {}) };
     }
 
@@ -477,7 +496,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
     throw new McpError(
       ErrorCode.MethodNotFound,
-      `Unknown tool: ${request.params.name}`,
+      `Unknown tool: ${request.params.name}`
     );
   } catch (error) {
     return {
@@ -492,7 +511,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
   }
 });
 
-server.onerror = (error: any) => {
+server.onerror = (error: Error | unknown) => {
   console.error(error);
 };
 
@@ -507,7 +526,7 @@ async function runServer() {
   console.error("Ravenna MCP Server running on stdio");
 }
 
-runServer().catch((error) => {
+runServer().catch((error: Error | unknown) => {
   console.error("Fatal error running server:", error);
   process.exit(1);
 });

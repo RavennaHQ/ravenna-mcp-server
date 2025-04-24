@@ -13,12 +13,15 @@ This is a Model Context Protocol (MCP) server for the Ravenna help desk platform
 
 1. Clone the repository
 2. Install dependencies:
+
 ```bash
 npm install
 # or
 bun install
 ```
+
 3. Set your Ravenna API key as an environment variable:
+
 ```bash
 export RAVENNA_API_KEY=your_api_key_here
 ```
@@ -40,14 +43,17 @@ The server runs on stdio, making it compatible with MCP clients like Claude Desk
 Creates a new ticket in Ravenna.
 
 **Required fields:**
+
 - `title`: The title of the ticket
 - `description`: A detailed description of the ticket
 
 **Optional fields:**
+
 - `priority`: Ticket priority (low, medium, high, urgent)
 - `tags`: Array of string tags to categorize the ticket
 
 **Example:**
+
 ```json
 {
   "title": "Website login issue",
@@ -62,9 +68,11 @@ Creates a new ticket in Ravenna.
 Updates an existing ticket in Ravenna.
 
 **Required fields:**
+
 - `id`: The ID of the ticket to update
 
 **Optional fields:**
+
 - `title`: Updated title of the ticket
 - `description`: Updated description of the ticket
 - `status`: Updated status (open, in_progress, pending, resolved, closed)
@@ -73,6 +81,7 @@ Updates an existing ticket in Ravenna.
 - `tags`: Updated tags for the ticket
 
 **Example:**
+
 ```json
 {
   "id": "12345",
@@ -87,6 +96,7 @@ Updates an existing ticket in Ravenna.
 Lists tickets in Ravenna with optional filters.
 
 **Optional fields:**
+
 - `status`: Filter by ticket status (open, in_progress, pending, resolved, closed, all)
 - `priority`: Filter by ticket priority (low, medium, high, urgent, all)
 - `assignee`: Filter by assignee user ID
@@ -94,6 +104,7 @@ Lists tickets in Ravenna with optional filters.
 - `limit`: Maximum number of tickets to return
 
 **Example:**
+
 ```json
 {
   "status": "open",
@@ -107,9 +118,11 @@ Lists tickets in Ravenna with optional filters.
 Get detailed information about a specific ticket.
 
 **Required fields:**
+
 - `id`: The ID of the ticket to retrieve
 
 **Example:**
+
 ```json
 {
   "id": "12345"
