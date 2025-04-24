@@ -1,16 +1,17 @@
 {
-  "name": "mcp-ravenna",
-  "module": "index.ts",
+  "name": "ravenna-mcp-server",
+  "version": "1.0.0",
   "type": "module",
   "private": true,
   "scripts": {
-    "inspect": "npx @modelcontextprotocol/inspector bun run index.ts"
+    "start": "node --loader ts-node/esm index.ts",
+    "build": "tsc",
+    "inspect": "npx @modelcontextprotocol/inspector npm run start"
   },
   "devDependencies": {
-    "@types/bun": "latest"
-  },
-  "peerDependencies": {
-    "typescript": "^5"
+    "@types/node": "^20.0.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.0"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.10.1"
