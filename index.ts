@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import {
@@ -222,7 +224,12 @@ async function createTicket(
       throw new Error(`Failed to create ticket: ${response.statusText}`);
     }
 
-    const data = await response.json();
+    const data = await response.json() as {
+      id: string;
+      title: string;
+      priority: string;
+      status: string;
+    };
 
     return [
       {
@@ -270,7 +277,12 @@ async function updateTicket(id: string, updates: Record<string, any>) {
       throw new Error(`Failed to update ticket: ${response.statusText}`);
     }
 
-    const data = await response.json();
+    const data = await response.json() as {
+      id: string;
+      title: string;
+      priority: string;
+      status: string;
+    };
 
     return [
       {
@@ -380,7 +392,17 @@ async function getTicket(id: string) {
       throw new Error(`Failed to get ticket: ${await response.text()}`);
     }
 
-    const ticket = await response.json();
+    const ticket = await response.json() as {
+      id: string;
+      title: string;
+      status: string;
+      priority: string;
+      created_at: string;
+      updated_at: string;
+      assignee: string | null;
+      tags: string[];
+      description: string;
+    };
 
     // Format ticket details for better readability
     const ticketDetails = [
