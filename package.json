@@ -1,6 +1,6 @@
 {
-  "name": "ravenna-mcp-server",
-  "version": "1.0.1",
+  "name": "@ravenna_eng/ravenna-mcp-server",
+  "version": "1.0.0",
   "type": "module",
   "description": "Ravenna MCP server for ticket management",
   "bin": {
@@ -12,7 +12,7 @@
   "scripts": {
     "start": "node dist/index.js",
     "dev": "node --loader ts-node/esm index.ts",
-    "build": "tsc",
+    "build": "tsc && chmod +x dist/index.js",
     "prepare": "npm run build",
     "inspect": "npx @modelcontextprotocol/inspector npm run dev",
     "lint": "eslint index.ts --ext .ts",
@@ -39,5 +39,8 @@
   },
   "engines": {
     "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
