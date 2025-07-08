@@ -1,6 +1,6 @@
 {
   "name": "@ravenna_eng/ravenna-mcp-server",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "type": "module",
   "description": "Ravenna MCP server for ticket management",
   "bin": {
